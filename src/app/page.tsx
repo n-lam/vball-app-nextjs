@@ -1,91 +1,217 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+'use client';
+import styles from "./page.module.css";
 
-const inter = Inter({ subsets: ['latin'] })
+import { create } from 'zustand'
+
+type Player = 'S' | 'OH1' | 'MB1' | 'OP' | 'OH2' | 'MB2';
+
+type GameStore = {
+  homePlayers: Player[],
+  awayPlayers: Player[],
+  homeScore: number,
+  awayScore: number,
+  servingSide: 'home' | 'away',
+  rotatePlayers: (side: 'home' | 'away', forward?: boolean) => void,
+  updateScore: (action: 'add' | 'sub', side: 'home' | 'away') => void,
+}
+
+
+const useStore = create<GameStore>((set) => ({
+  homePlayers: ['S', 'OH1', 'MB1', 'OP', 'OH2', 'MB2'],
+  awayPlayers: ['S', 'OH1', 'MB1', 'OP', 'OH2', 'MB2'],
+  homeScore: 0,
+  awayScore: 0,
+  servingSide: 'home',
+  rotatePlayers: (side='home', forward=true) => set((state) => {
+    const playerKeyname: 'homePlayers' | 'awayPlayers' = `${side}Players`;
+    let players = [...state[playerKeyname]];
+    if (forward) {
+      players.push(players.shift() as Player);
+    } else {
+      players.unshift(players.pop() as Player);
+    }
+    return {
+      [playerKeyname]: players,
+    }
+  }),
+  updateScore: (action='add', side='home') => set((state) => {
+    const scoreKeyname: 'homeScore' | 'awayScore' = `${side}Score`;
+    const oldScore = state[scoreKeyname];
+    const newScore = action === 'add' ? oldScore + 1 : oldScore - 1;
+    const correctedScore = newScore < 0 ? 0 : newScore;
+
+    const changeServer = action === 'add' && side !== state.servingSide;
+    const nextServingSide = changeServer ? {servingSide: side} : {};
+
+    if (changeServer) state.rotatePlayers(side);
+
+    return {
+      ...nextServingSide,
+      [scoreKeyname]: correctedScore,
+    }
+  }),
+}));
+
+
 
 export default function Home() {
+
+  const {homeScore, awayScore, updateScore, homePlayers, awayPlayers} = useStore();
+
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className={styles.court}>
+      <div className={styles.scoreboard}>
+        <button className={styles.scoreboard__button} onClick={() => updateScore('sub', 'home')}>-</button>
+        <p className={styles.scoreboard__score}>{homeScore}</p>
+        <button className={styles.scoreboard__button} onClick={() => updateScore('add', 'home')}>+</button>
+      </div>
+      <div
+        className={[
+          styles.home__backcourt,
+          styles.court_area,
+          styles.backcourt,
+        ].join(" ")}
+        >
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__left,
+          ].join(" ")}
+        >
+          {homePlayers[0]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__middle,
+          ].join(" ")}
+        >
+          {homePlayers[5]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__right,
+          ].join(" ")}
+        >
+          {homePlayers[4]}
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
+      <div
+        className={[
+          styles.home__frontcourt,
+          styles.court_area,
+          styles.frontcourt,
+        ].join(" ")}
+      >
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__left,
+          ].join(" ")}
+        >
+          {homePlayers[1]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__middle,
+          ].join(" ")}
+        >
+          {homePlayers[2]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__home,
+            styles.position__right,
+          ].join(" ")}
+        >
+          {homePlayers[3]}
         </div>
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+      <div
+        className={[
+          styles.away__frontcourt,
+          styles.court_area,
+          styles.frontcourt,
+        ].join(" ")}
+      >
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__left,
+          ].join(" ")}
         >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+          {awayPlayers[3]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__middle,
+          ].join(" ")}
         >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+          {awayPlayers[2]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__right,
+          ].join(" ")}
         >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          {awayPlayers[1]}
+        </div>
+      </div>
+      <div
+        className={[
+          styles.away__backcourt,
+          styles.court_area,
+          styles.backcourt,
+        ].join(" ")}
+      >
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__left,
+          ].join(" ")}
+        >
+          {awayPlayers[4]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__middle,
+          ].join(" ")}
+        >
+          {awayPlayers[5]}
+        </div>
+        <div
+          className={[
+            styles.player,
+            styles.player__away,
+            styles.position__right,
+          ].join(" ")}
+        >
+          {awayPlayers[0]}
+        </div>
+
+      </div>
+      <div className={styles.scoreboard}>
+        <button className={styles.scoreboard__button} onClick={() => updateScore('sub', 'away')}>-</button>
+        <p className={styles.scoreboard__score}>{awayScore}</p>
+        <button className={styles.scoreboard__button} onClick={() => updateScore('add', 'away')}>+</button>
       </div>
     </main>
-  )
+  );
 }
