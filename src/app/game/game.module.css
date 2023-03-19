@@ -1,33 +1,46 @@
-
-
+/* This should class should be on the root div. It will expose the necessary variable to all the children classes. */
 .court {
   --player-circle-diameter: 50px;
 
-  --home-base-line: 14%;
-  --home-3m-line: 38%;
-  --centre-line: 50%;
-  --away-3m-line: 62%;
-  --away-base-line: 86%;
+  /* dimensions are based on the volleyball_court.svg proportions */
+  --border-height: 100vh;
+  --border-width: calc(var(--border-height) * 0.6);
 
-  --court-left-line: 41%;
-  --court-right-line: 59%;
+  --court-height: calc(var(--border-height) * (1788 / 2500));
+  --court-width: calc(var(--border-width) * (888 / 1500));
 
-  --court-width: calc(var(--court-right-line) - var(--court-left-line));
+  --home-base-line: calc(var(--border-height) * (356 / 2500));
+  --home-3m-line: calc(var(--border-height) * (957 / 2500));
+  --centre-line: calc(var(--border-height) / 2);
+  --away-3m-line: calc(2 * var(--centre-line) - var(--home-3m-line));
+  --away-base-line: calc(var(--court-height) + var(--home-base-line));
+  
   --backcourt-height: calc(var(--home-3m-line) - var(--home-base-line));
   --frontcourt-height: calc(var(--centre-line) - var(--home-3m-line));
+  
+  --court-left-line: calc(var(--border-width) * (306 / 1500));
+  --court-right-line: calc(var(--court-left-line) + var(--court-width));
 
+  --spacing: 20px;
 
-  height: 100vh;
+  height: var(--border-height);
+  width: var(--border-width);
+
   background-image: url('/volleyball_court.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 
 .court_area {
   position: fixed;
   left: var(--court-left-line);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .backcourt {
@@ -44,6 +57,7 @@
   /* background-color: lightblue; */
   
   top: var(--home-base-line);
+  display: flex;
 }
 
 .home__frontcourt {
@@ -66,7 +80,7 @@
 
 
 .player {
-  position: absolute;
+  /* position: absolute; */
 
   display: flex;
   justify-content: center;
@@ -81,7 +95,8 @@
   height: var(--player-circle-diameter);
 
   font-weight: bold;
-  top: calc(50% - (var(--player-circle-diameter) / 2));
+  font-size: smaller;
+  /* top: calc(50% - (var(--player-circle-diameter) / 2)); */
 }
 
 .player__home {
@@ -93,24 +108,30 @@
 }
 
 
-.position__left {
-  left: calc(25% - (var(--player-circle-diameter) / 2));
-}
+.scoreboard__container {
+  position: fixed;
+  left: var(--court-left-line);
 
-.position__middle {
-  left: calc(50% - (var(--player-circle-diameter) / 2));
-}
+  height: var(--home-base-line);
+  width: var(--court-width);
 
-.position__right {
-  left: calc(75% - (var(--player-circle-diameter) / 2));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing);
 }
-
 
 .scoreboard {
-  left: calc(50% - 150px);
+
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
+}
+
+.scoreboard__away {
+  top: var(--away-base-line);
 }
 
 .scoreboard__button {
@@ -129,6 +150,10 @@
   border-color: white;
 
   font-size: large;
+}
+
+.scoreboard__team_name {
+  text-transform: capitalize;
 }
 
 .scoreboard__score {
