@@ -26,7 +26,7 @@
   height: var(--border-height);
   width: var(--border-width);
 
-  background-image: url('/volleyball_court.svg');
+  background-image: url('/volleyball_court_portrait.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
