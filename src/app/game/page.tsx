@@ -109,18 +109,18 @@ function Scoreboard({ side }: ScoreboardProps) {
   );
 }
 
-export default function Game() {
+function Court() {
   const { home, away } = useStore();
   const { players: homePlayers } = home;
-  const { players: awayPlayers } = away
+  const { players: awayPlayers } = away;
+
   return (
-    <main className={styles.court}>
-      <Scoreboard side="home" />
+    <>
       <div
         className={[
-          styles.home__backcourt,
           styles.court_area,
           styles.backcourt,
+          styles.home__backcourt,
         ].join(" ")}
       >
         <div className={[styles.player, styles.player__home].join(" ")}>
@@ -135,9 +135,9 @@ export default function Game() {
       </div>
       <div
         className={[
-          styles.home__frontcourt,
           styles.court_area,
           styles.frontcourt,
+          styles.home__frontcourt,
         ].join(" ")}
       >
         <div className={[styles.player, styles.player__home].join(" ")}>
@@ -152,9 +152,9 @@ export default function Game() {
       </div>
       <div
         className={[
-          styles.away__frontcourt,
           styles.court_area,
           styles.frontcourt,
+          styles.away__frontcourt,
         ].join(" ")}
       >
         <div className={[styles.player, styles.player__away].join(" ")}>
@@ -169,9 +169,9 @@ export default function Game() {
       </div>
       <div
         className={[
-          styles.away__backcourt,
           styles.court_area,
           styles.backcourt,
+          styles.away__backcourt,
         ].join(" ")}
       >
         <div className={[styles.player, styles.player__away].join(" ")}>
@@ -184,6 +184,15 @@ export default function Game() {
           {awayPlayers[0]}
         </div>
       </div>
+    </>
+  )
+}
+
+export default function Game() {
+  return (
+    <main className={styles.court}>
+      <Scoreboard side="home" />
+      <Court />
       <Scoreboard side="away" />
     </main>
   );
