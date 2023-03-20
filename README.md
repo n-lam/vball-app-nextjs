@@ -36,3 +36,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## TODO
+
+- [ ] Make a landscape view
+- [ ] Add a start menu (load game, new game)
+- [ ] Add a help menu
+- [ ] Add a save game
+- [ ] Add a game loader page
+  - [ ] Add a delete button (with multi-select)
+- [ ] Add dynamic team names
