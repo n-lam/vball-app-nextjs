@@ -39,10 +39,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## TODO
 
-- [ ] Make a landscape view
+- [X] Make a landscape view
 - [ ] Add a start menu (load game, new game)
 - [ ] Add a help menu
 - [ ] Add a save game
 - [ ] Add a game loader page
   - [ ] Add a delete button (with multi-select)
 - [ ] Add dynamic team names
+- [ ] Convert store into composable slices in zustand
