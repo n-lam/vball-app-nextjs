@@ -128,25 +128,25 @@
   .home__backcourt {
     /* background-color: lightblue; */
 
-    left: var(--home-base-line);
+    left: var(--away-3m-line);
   }
-
+  
   .home__frontcourt {
     /* background-color: cyan; */
-
-    left: var(--home-3m-line);
-  }
-
-  .away__frontcourt {
-    /* background-color: lightcoral; */
-
+    
     left: var(--centre-line);
   }
-
+  
+  .away__frontcourt {
+    /* background-color: lightcoral; */
+    
+    left: var(--home-3m-line);
+  }
+  
   .away__backcourt {
     /* background-color: lightpink; */
-
-    left: var(--away-3m-line);
+    
+    left: var(--home-base-line);
   }
 
 
@@ -156,11 +156,11 @@
   }
 
   .scoreboard__home {
-    left: var(--home-base-line);
-  }
-
-  .scoreboard__away {
     left: var(--centre-line);
+  }
+  
+  .scoreboard__away {
+    left: var(--home-base-line);
   }
 }
 
